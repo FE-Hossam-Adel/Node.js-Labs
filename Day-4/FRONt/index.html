@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            *{
+                padding: 0;
+                margin: 0;
+            }
+        }
+        #chat-box{
+            height: 100vh;
+            /* background-color: rgba(53, 173, 17, 0.8); */
+            position: relative;
+        }
+        #chat-box > div > input[type="text"]{
+            padding: 15px 10px;
+            width: 80%;
+            border-radius: 50px 0px 0px 50px;
+        }
+        #chat-box > div > input[type="submit"]{
+            padding: 15px 10px;
+            width: 20%;
+            border-radius: 0px 50px 50px 0px;
+        }
+        #chat-box > div > input{
+            float: left;
+            font-size: 32px;
+
+        }
+        #chat-box > div > input:focus{
+            outline: 4px solid rgba(44, 50, 52, 0);
+
+        }
+        #chat-box > #message-box{
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+        }
+
+        #chat-box > :first-child{
+            /* position: absolute; */
+            /* bottom: 20px; */
+            /* left: 50%; */
+            /* transform: translateX(-50%); */
+            width: 90%;
+            margin: auto;
+            height: 85%;
+            overflow-y: auto;
+            padding: 20px;
+            font-size: 22px;
+            box-sizing: border-box;
+        }
+
+        #chat-box > :first-child::-webkit-scrollbar {
+        width: 10px; /* Width of the scrollbar */
+    }
+
+    /* Track */
+    #chat-box > :first-child::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    #chat-box > :first-child::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    #chat-box > :first-child::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+    </style>
+</head>
+<body>
+    <div id="chat-box">
+        <div>
+            
+        </div>
+        <div id="message-box">
+            <input type="text" autocomplete="off" id="message">
+            <input type="submit"  id="send" value="send">
+        </div>
+    </div>
+    
+    <script src="./node_modules/socket.io/client-dist/socket.io.min.js"></script>
+    <script>
+        console.log(io);
+        let userId;
+        const clientIo = io("http://localhost:3000");
+
+        document.getElementById('send').addEventListener('click',()=>{
+            send()
+        })
+        function send(){
+            let messageInput = document.getElementById('message');
+            clientIo.emit('msg' , messageInput.value)
+            messageInput.value='';
+        }
+
+        clientIo.on('msg' , (msg)=>{
+            let msgBox = document.querySelector('#chat-box > :first-child')
+            let divEle = document.createElement('div');
+            divEle.innerText = msg.message;
+            divEle.style.padding = "15px"
+            divEle.style.marginTop = "15px"
+
+            if(msg.id == userId)
+            divEle.style.backgroundColor = "#09c2"
+            else
+            divEle.style.backgroundColor = "#2622"
+            msgBox.appendChild(divEle)
+            msgBox.scrollTo(0, msgBox.scrollHeight);
+        })
+
+        clientIo.on('user' , (id)=>{
+            userId = id;
+        })
+
+    </script>
+    
+</body>
+</html>
