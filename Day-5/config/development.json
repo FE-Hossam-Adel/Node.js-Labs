@@ -1,0 +1,1 @@
+{"database":{"connectionString":"mongodb://localhost:27017/Auth","superAdminId":"66549a3b54ad0827a4541f3b","superAdminPassword":"admin","defaultRoleId":"66549a3b54ad0827a4541f3c"},"bcrypt":{"saltOrRounds":10},"token":{"secretKey":"your-256-bit-secret","tokenKeyInHeader":"token"}}
